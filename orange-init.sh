@@ -31,12 +31,13 @@ echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/010-nopasswd-$USER
 # Update hostname
 echo -n "Введите номер для имени контроллера (rpiXXX): "
 read num
-
+echo
 sudo hostnamectl set-hostname "rpi${num}"
 echo "Имя хоста изменено на: rpi${num}"
 
 # Change password for the 'orangepi' user
 echo -n "Введите новый пароль: "
 read newpass
+echo
 echo "$USER:$newpass" | sudo chpasswd
 echo "Пароль для пользователя $USER изменён."
