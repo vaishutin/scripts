@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Set timezone to Moscow
 sudo timedatectl set-timezone Europe/Moscow
