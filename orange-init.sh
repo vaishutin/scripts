@@ -30,7 +30,7 @@ echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/010-nopasswd-$USER
 
 # Update hostname
 read -p "Введите номер для имени контроллера (rpiXXX): " num
-echo
+
 sudo hostnamectl set-hostname "rpi${num}"
 echo "Имя хоста изменено на: rpi${num}"
 
