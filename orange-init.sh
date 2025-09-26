@@ -35,8 +35,7 @@ sudo hostnamectl set-hostname "rpi${num}"
 echo "Имя хоста изменено на: rpi${num}"
 
 # Change password for the 'orangepi' user
-echo "Введите новый пароль: "
-read newpass
-echo
+read -p "Введите новый пароль: " newpass </dev/tty
+
 echo "$USER:$newpass" | sudo chpasswd
 echo "Пароль для пользователя $USER изменён."
