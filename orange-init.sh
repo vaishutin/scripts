@@ -1,7 +1,7 @@
 #!/bin/bash
-set -euo pipefail
 
-exec </dev/tty
+0<&-
+exec 0</dev/tty
 
 # Set timezone to Moscow
 sudo timedatectl set-timezone Europe/Moscow
