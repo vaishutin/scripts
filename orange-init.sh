@@ -1,7 +1,6 @@
 #!/bin/bash
 
-0<&-
-exec 0</dev/tty
+exec </dev/tty
 
 # Set timezone to Moscow
 sudo timedatectl set-timezone Europe/Moscow
@@ -32,7 +31,7 @@ sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config &
 echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/010-nopasswd-$USER
 
 # Update hostname
-read -p "Введите номер для имени контроллера (rpiXXX): " num
+read -p "Введите номер для имени контроллера (rpiXXX): " num; echo
 
 sudo hostnamectl set-hostname "rpi${num}"
 echo "Имя хоста изменено на: rpi${num}"
