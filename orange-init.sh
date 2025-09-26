@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Set timezone to Moscow
+sudo timedatectl set-timezone Europe/Moscow
+
+
 rm -f /etc/apt/sources.list.d/docker.list
 
 sudo tee /etc/apt/sources.list >/dev/null <<'EOF'
@@ -14,3 +18,25 @@ deb-src http://security.debian.org/debian-security/ bullseye-security main contr
 EOF
 
 apt-get update
+
+# Configure GPIO
+echo "overlays=$(grep -oP '^overlays=\K.*' /boot/orangepiEnv.txt) disable-uart0 ph-uart5 pi-pwm3 pi-pwm4" >> /boot/orangepiEnv.txt
+
+# Disable root SSH login
+sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config && sudo systemctl restart ssh
+
+# Allow passwordless sudo for the 'orange' user
+echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/010-nopasswd-$USER
+
+# Update hostname
+echo -n "Введите номер для имени контроллера (rpiXXX): "
+read num
+
+sudo hostnamectl set-hostname "rpi${num}"
+echo "Имя хоста изменено на: rpi${num}"
+
+# Change password for the 'orangepi' user
+echo -n "Введите новый пароль: "
+read newpass
+echo "$USER:$newpass" | sudo chpasswd
+echo "Пароль для пользователя $USER изменён."
