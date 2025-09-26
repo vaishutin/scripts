@@ -1,4 +1,7 @@
 #!/bin/bash
+set -e
+
+exec </dev/tty
 
 # Set timezone to Moscow
 sudo timedatectl set-timezone Europe/Moscow
@@ -29,13 +32,13 @@ sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config &
 echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/010-nopasswd-$USER
 
 # Update hostname
-read -p "Введите номер для имени контроллера (rpiXXX): " num </dev/tty
+read -p "Введите номер для имени контроллера (rpiXXX): " num
 
 sudo hostnamectl set-hostname "rpi${num}"
 echo "Имя хоста изменено на: rpi${num}"
 
 # Change password for the 'orangepi' user
-read -p "Введите новый пароль: " newpass </dev/tty
+read -p "Введите новый пароль: " newpass
 
 echo "$USER:$newpass" | sudo chpasswd
 echo "Пароль для пользователя $USER изменён."
