@@ -45,14 +45,9 @@ run_with_spinner "sudo rm -f /etc/apt/sources.list.d/docker.list" "Удален�
 
 run_with_spinner "
 sudo tee /etc/apt/sources.list >/dev/null <<'EOF'
-deb http://deb.debian.org/debian bullseye main contrib non-free
-deb-src http://deb.debian.org/debian bullseye main contrib non-free
-
-deb http://deb.debian.org/debian bullseye-updates main contrib non-free
-deb-src http://deb.debian.org/debian bullseye-updates main contrib non-free
-
-deb http://security.debian.org/debian-security/ bullseye-security main contrib non-free
-deb-src http://security.debian.org/debian-security/ bullseye-security main contrib non-free
+deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
+deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
+deb http://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware
 EOF
 " "Обновление списка источников APT"
 
