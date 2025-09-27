@@ -1,6 +1,5 @@
 #!/bin/bash
-
-exec </dev/tty
+set -eou pipefail
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -35,11 +34,8 @@ run_with_spinner() {
   return $status
 }
 
-# Пример использования
-run_with_spinner "sudo apt-get update -y" "Обновление репозиториев"
-run_with_spinner "sleep 3" "Имитация долгой команды"
-run_with_spinner "exit 1" "Опа"
-
+sudo whoami > /dev/null
+#run_with_spinner "whoami" "Авторизация"
 # Set timezone to Moscow
 run_with_spinner "sudo timedatectl set-timezone Europe/Moscow" "Установка часового пояса"
 
@@ -63,7 +59,8 @@ EOF
 run_with_spinner "sudo apt-get update -y" "Обновление репозиториев"
 
 run_with_spinner "
-sudo echo "overlays=$(grep -oP '^overlays=\K.*' /boot/orangepiEnv.txt) disable-uart0 ph-uart5 pi-pwm3 pi-pwm4" >> /boot/orangepiEnv.txt
+sudo sed -i '/^overlays/d' /boot/orangepiEnv.txt;
+echo 'overlays=disable-uart0 ph-uart5 pi-pwm3 pi-pwm4' | sudo tee -a /boot/orangepiEnv.txt
 " "Настройка контактов на плате"
 
 run_with_spinner "
@@ -72,21 +69,21 @@ sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config &
 
 
 run_with_spinner "
-echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/010-nopasswd-$USER
+echo \"$USER ALL=(ALL) NOPASSWD:ALL\" | sudo tee /etc/sudoers.d/010-nopasswd-$USER
 " "Настройка sudo без пароля для пользователя"
 
 
-read -p "Введите номер для имени контроллера (rpiXXX): " num
+read -p "Введите номер для имени контроллера (rpiXXX): " num < /dev/tty
 
 run_with_spinner "
-sudo hostnamectl set-hostname "rpi${num}"
+sudo hostnamectl set-hostname \"rpi${num}\"
 " "Обновление имени хоста"
 
 
-read -p "Введите новый пароль: " newpass
+read -p "Введите новый пароль: " newpass < /dev/tty
 
 run_with_spinner "
-echo "$USER:$newpass" | sudo chpasswd
+echo \"$USER:$newpass\" | sudo chpasswd
 " "Смена пароля пользователя"
 
 exit 0
